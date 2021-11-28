@@ -1,10 +1,10 @@
-import datetime
 import numpy as np
 import uvicorn
-from fastapi import FastAPI, Query, HTTPException
-from pydantic import BaseModel, validator, Field
-from typing import Optional
-from datetime import datetime, time, timedelta
+from fastapi import FastAPI, HTTPException
+from fastapi.responses import JSONResponse
+from pydantic import BaseModel, validator
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
 
 app = FastAPI()
 
@@ -41,45 +41,32 @@ class Item(BaseModel):
         schema_extra = {
             "example": {
                 "date": "31.01.2021",
-                "periods": 7,
+                "periods": 3,
                 "amount": 10000,
-                "rate": 8,
+                "rate": 6,
             }
         }
 
 
-@app.get("/")
-async def root():
+@app.get("/test/")
+async def test():
     return {"message": "Hello World"}
 
 
-# создание нового пользователя, метод POST, поля формы, возврат JSON
-@app.post("/test/")
-async def create_item(item: Item):
-    # item_dict = item.dict()
-    # print(item_dict)
-    # print(item_dict['date'], type(item_dict['date']))
-    # print(item_dict['periods'], type(item_dict['periods']))
-    # print(item_dict['amount'], type(item_dict['amount']))
-    # print(item_dict['rate'], type(item_dict['rate']))
+@app.post("/")
+async def root(item: Item):
+    count = 0
+    summa = item.amount
+    data = {}
+    for i in range(item.periods):
+        summa += round(summa * (1 + item.rate / 12 / 100) - summa, 2)
+        data[(datetime.strptime(item.date, "%d.%m.%Y") + relativedelta(months=count)).strftime('%d.%m.%Y')] = round(
+            summa, 2)
+        count += 1
+    print(data)
 
-    # if item_dict['periods'] not in range(1, 60):
-    #     raise HTTPException(status_code=400, detail={"error": f"период не может быть отрицательным"})
-    # elif item_dict['periods'] > 60:
-    #     raise HTTPException(status_code=400, detail={"error": f"период не может быть больше 60 месяцев"})
-    # elif item_dict['amount'] > 60:
-    #     raise HTTPException(status_code=400, detail={"error": f"период не может быть больше 60 месяцев"})
-
-    # if item_dict.:
-    #     raise HTTPException(
-    #         status_code=400, detail=f"Username '{user.username}' already registered")
-
-    # if item.tax:
-    #     price_with_tax = item.price + item.tax
-    #     item_dict.update({"price_with_tax": price_with_tax})
-    return item
+    return JSONResponse(content=data)
 
 
-# main
 if __name__ == '__main__':
     uvicorn.run('main:app', host='127.0.0.1', port=8000)
