@@ -46,8 +46,7 @@ class Item(BaseModel):
         '''
         try:
             datetime.strptime(date, "%d.%m.%Y")
-            return date
-        except:
+        except ValueError:
             raise UnicornException(name="дата (date) должен быть строкой формата дд.мм.гггг")
 
     @validator('periods')
