@@ -41,7 +41,7 @@ class Item(BaseModel):
     @validator('date')
     def date_must_be_str(cls, date: str):
         '''
-        :param date:
+        :param date: дата открытия вклада
         :return: date or Exception
         '''
         try:
@@ -52,7 +52,7 @@ class Item(BaseModel):
     @validator('periods')
     def periods_in_interval(cls, periods: int):
         '''
-        :param periods:
+        :param periods: период вклада в месяцах
         :return: periods or Exception
         '''
         if periods not in range(1, 61):
@@ -62,7 +62,7 @@ class Item(BaseModel):
     @validator('amount')
     def amount_must_be_in_interval(cls, amount: int):
         '''
-        :param amount:
+        :param amount: начальная сумма вклада
         :return: amount or Exception
         '''
         if amount not in range(10000, 3000001):
@@ -72,7 +72,7 @@ class Item(BaseModel):
     @validator('rate')
     def rate_must_be_in_interval(cls, rate: float):
         '''
-        :param rate:
+        :param rate: процентная ставка по вкладу
         :return: rate or Exception
         '''
         if rate not in np.arange(1.0, 8.1, 0.1).round(1):
@@ -91,7 +91,7 @@ async def test():
 @APP.post("/")
 async def root(item: Item):
     '''
-    :param item:
+    :param item: список начислений процентов по вкладу
     :return: JSONResponse
     '''
     count = 0
