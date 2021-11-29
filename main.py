@@ -39,7 +39,7 @@ class Item(BaseModel):
         }
 
     @validator('date')
-    def date_must_be_str(cls, date: str):
+    def date_open(cls, date: str):
         '''
         :param date: дата открытия вклада
         :return: date or Exception
@@ -50,7 +50,7 @@ class Item(BaseModel):
             raise UnicornException(name="дата (date) должен быть строкой формата дд.мм.гггг")
 
     @validator('periods')
-    def periods_in_interval(cls, periods: int):
+    def period_in_month(cls, periods: int):
         '''
         :param periods: период вклада в месяцах
         :return: periods or Exception
@@ -60,7 +60,7 @@ class Item(BaseModel):
         return periods
 
     @validator('amount')
-    def amount_must_be_in_interval(cls, amount: int):
+    def amount(cls, amount: int):
         '''
         :param amount: начальная сумма вклада
         :return: amount or Exception
@@ -70,7 +70,7 @@ class Item(BaseModel):
         return amount
 
     @validator('rate')
-    def rate_must_be_in_interval(cls, rate: float):
+    def rate(cls, rate: float):
         '''
         :param rate: процентная ставка по вкладу
         :return: rate or Exception
