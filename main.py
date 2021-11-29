@@ -59,7 +59,7 @@ class Item(BaseModel):
 
 @app.get("/test/")
 async def test():
-    return {"message": "Hello World"}
+    return {"message": "OK"}
 
 
 @app.post("/")
