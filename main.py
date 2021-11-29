@@ -34,7 +34,7 @@ class Item(BaseModel):
                 "date": "31.01.2021",
                 "periods": 3,
                 "amount": 10000,
-                "rate": 6,
+                "rate": 6.0
             }
         }
 
@@ -46,6 +46,7 @@ class Item(BaseModel):
         '''
         try:
             datetime.strptime(date, "%d.%m.%Y")
+            return date
         except ValueError:
             raise UnicornException(name="дата (date) должен быть строкой формата дд.мм.гггг")
 
@@ -60,7 +61,7 @@ class Item(BaseModel):
         return periods
 
     @validator('amount')
-    def amount(cls, amount: int):
+    def amount_in(cls, amount: int):
         '''
         :param amount: начальная сумма вклада
         :return: amount or Exception
@@ -70,7 +71,7 @@ class Item(BaseModel):
         return amount
 
     @validator('rate')
-    def rate(cls, rate: float):
+    def rate_in(cls, rate: float):
         '''
         :param rate: процентная ставка по вкладу
         :return: rate or Exception
@@ -83,6 +84,7 @@ class Item(BaseModel):
 @APP.get("/test/")
 async def test():
     '''
+    Заглушка для проверки сервиса GET-запросом
     :return: message
     '''
     return {"message": "OK"}
@@ -91,6 +93,7 @@ async def test():
 @APP.post("/")
 async def root(item: Item):
     '''
+    Путь для POST-запроса с данными
     :param item: список начислений процентов по вкладу
     :return: JSONResponse
     '''
