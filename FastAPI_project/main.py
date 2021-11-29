@@ -15,6 +15,15 @@ class Item(BaseModel):
     amount: int
     rate: float
 
+    @validator('date')
+    def date_must_be_str(cls, v):
+        try:
+            datetime.strptime(v, "%d.%m.%Y")
+            return v
+        except:
+            raise HTTPException(status_code=400,
+                                detail={"error": f"дата (date) должен быть строкой формата дд.мм.гггг"})
+
     @validator('periods')
     def periods_must_be_in_interval(cls, v):
         if v not in range(1, 61):
