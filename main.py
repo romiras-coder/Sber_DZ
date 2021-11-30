@@ -10,12 +10,20 @@ APP = FastAPI()
 
 
 class UnicornException(Exception):
+    ''' Переопределение стандартного исключения  '''
+
     def __init__(self, name: str):
         self.name = name
 
 
 @APP.exception_handler(UnicornException)
 async def unicorn_exception_handler(request: Request, exc: UnicornException):
+    '''
+    Функция ответа
+    :param request:
+    :param exc:
+    :return:
+    '''
     return JSONResponse(
         status_code=400,
         content={"error": f"{exc.name}"},
@@ -23,12 +31,16 @@ async def unicorn_exception_handler(request: Request, exc: UnicornException):
 
 
 class Item(BaseModel):
+    '''
+    Класс создания запроса на депозит
+    '''
     date: str
     periods: int
     amount: int
     rate: float
 
     class Config:
+        ''' Класс определения параметров '''
         schema_extra = {
             "example": {
                 "date": "31.01.2021",
