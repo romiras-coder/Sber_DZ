@@ -20,7 +20,7 @@ class UnicornException(Exception):
 async def unicorn_exception_handler(request: Request, exc: UnicornException):
     '''
     Функция ответа
-    :param request:
+    :param request: Должен передаваться, иначе не сможем переопределить ответ
     :param exc:
     :return:
     '''
@@ -110,7 +110,7 @@ async def root(item: Item):
     :return: JSONResponse
     '''
     count = 0
-    summa = item.amount
+    summa = float(item.amount)
     data = {}
     for _ in range(item.periods):
         summa += round(summa * (1 + item.rate / 12 / 100) - summa, 2)
