@@ -4,4 +4,5 @@ ENV PYTHONUNBUFFERED 1
 WORKDIR /usr/src/app
 COPY . .
 RUN pip install --upgrade pip && pip install -r requirements.txt
+RUN pytest
 CMD [ "python", "./main.py" ]
